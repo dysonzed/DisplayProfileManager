@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug DisplayProfileManager",
+            "type": "clr",
+            "request": "launch",
+            "preLaunchTask": "build-debug",
+            "program": "${workspaceFolder}/bin/Debug/DisplayProfileManager.exe",
+            "cwd": "${workspaceFolder}/bin/Debug",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        }
+    ]
+}
