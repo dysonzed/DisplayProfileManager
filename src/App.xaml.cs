@@ -82,7 +82,7 @@ namespace DisplayProfileManager
                 }
             }
 
-            if (!CheckSingleInstance())
+            if (!CheckSingleInstance(startInTray))
             {
                 Shutdown();
                 return;
@@ -113,14 +113,23 @@ namespace DisplayProfileManager
             }
         }
 
-        private bool CheckSingleInstance()
+        private bool CheckSingleInstance(bool startInTray)
         {
             bool isNewInstance;
             _instanceMutex = new Mutex(true, MUTEX_NAME, out isNewInstance);
 
             if (!isNewInstance)
             {
-                BringExistingInstanceToFront();
+                // A duplicate tray launch (e.g. two auto-start entries firing at logon) must not
+                // pop up the window of the instance that is already running in the tray.
+                if (startInTray)
+                {
+                    logger.Info("Another instance is already running - exiting duplicate --tray launch");
+                }
+                else
+                {
+                    BringExistingInstanceToFront();
+                }
                 return false;
             }
 

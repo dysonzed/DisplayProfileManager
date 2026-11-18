@@ -49,9 +49,26 @@ namespace DisplayProfileManager.Helpers
         {
             try
             {
-                return mode == AutoStartMode.Registry
+                bool success = mode == AutoStartMode.Registry
                     ? EnableAutoStartRegistry(startInTray)
                     : EnableAutoStartTaskScheduler(startInTray);
+
+                // Remove a leftover entry from the other mode, otherwise the app is launched twice at logon
+                if (success)
+                {
+                    if (mode == AutoStartMode.Registry && IsAutoStartEnabledTaskScheduler())
+                    {
+                        logger.Info("Removing leftover Task Scheduler auto-start entry");
+                        DisableAutoStartTaskScheduler();
+                    }
+                    else if (mode == AutoStartMode.TaskScheduler && IsAutoStartEnabledRegistry())
+                    {
+                        logger.Info("Removing leftover registry auto-start entry");
+                        DisableAutoStartRegistry();
+                    }
+                }
+
+                return success;
             }
             catch (Exception ex)
             {
