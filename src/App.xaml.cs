@@ -315,7 +315,7 @@ namespace DisplayProfileManager
                             string errorDetails = _profileManager.GetApplyResultErrorMessage(startupProfile.Name, applyResult);
                             logger.Warn(errorDetails);
 
-                            _trayIcon?.ShowNotification("Display Profile Manager", $"Startup profile: {errorDetails}", System.Windows.Forms.ToolTipIcon.Info);
+                            _trayIcon?.ShowNotification("Display Profile Manager", $"Startup profile: {errorDetails}", System.Windows.Forms.ToolTipIcon.Warning);
                         }
 
                     }

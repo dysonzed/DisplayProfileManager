@@ -170,19 +170,19 @@ namespace DisplayProfileManager.UI
                         string message = $"Profile '{profile.Name}' applied successfully.";
                         logger.Info(message);
 
-                        _notifyIcon.ShowBalloonTip(3000, "Display Profile Manager", message, ToolTipIcon.Info);
+                        ShowNotification("Display Profile Manager", message, ToolTipIcon.Info);
                     }
                     else
                     {
                         string errorDetails = _profileManager.GetApplyResultErrorMessage(profile.Name, applyResult);
                         logger.Warn(errorDetails);
 
-                        _notifyIcon.ShowBalloonTip(5000, "Display Profile Manager", errorDetails, ToolTipIcon.Error);
+                        ShowNotification("Display Profile Manager", errorDetails, ToolTipIcon.Error);
                     }
                 }
                 catch (Exception ex)
                 {
-                    _notifyIcon.ShowBalloonTip(5000, "Display Profile Manager", 
+                    ShowNotification("Display Profile Manager", 
                         $"Error applying profile: {ex.Message}", ToolTipIcon.Error);
                 }
             }
@@ -204,12 +204,12 @@ namespace DisplayProfileManager.UI
             {
                 await _profileManager.LoadProfilesAsync();
                 BuildContextMenu();
-                _notifyIcon.ShowBalloonTip(2000, "Display Profile Manager", 
+                ShowNotification("Display Profile Manager", 
                     "Profiles refreshed", ToolTipIcon.Info);
             }
             catch (Exception ex)
             {
-                _notifyIcon.ShowBalloonTip(5000, "Display Profile Manager", 
+                ShowNotification("Display Profile Manager", 
                     $"Error refreshing profiles: {ex.Message}", ToolTipIcon.Error);
             }
         }
@@ -255,6 +255,14 @@ namespace DisplayProfileManager.UI
 
         public void ShowNotification(string title, string message, ToolTipIcon icon = ToolTipIcon.Info, int timeout = 3000)
         {
+            // "Show notifications" only silences informational messages; warnings and errors always show
+            bool isInformational = icon == ToolTipIcon.Info || icon == ToolTipIcon.None;
+            if (isInformational && !SettingsManager.Instance.ShouldShowNotifications())
+            {
+                logger.Debug($"Notification suppressed by settings: {message}");
+                return;
+            }
+
             _notifyIcon.ShowBalloonTip(timeout, title, message, icon);
         }
 
