@@ -436,10 +436,7 @@ namespace DisplayProfileManager
                     var applyResult = await _profileManager.ApplyProfileAsync(profile);
                     if (applyResult.Success)
                     {
-                        string message = $"Profile '{profile.Name}' applied successfully.";
-                        logger.Info(message);
-
-                        _trayIcon?.ShowNotification("Display Profile Manager", message, System.Windows.Forms.ToolTipIcon.Info);
+                        logger.Info($"Profile '{profile.Name}' applied successfully.");
                     }
                     else
                     {
