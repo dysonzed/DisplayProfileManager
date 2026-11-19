@@ -167,7 +167,10 @@ namespace DisplayProfileManager.UI
                     
                     if (applyResult.Success)
                     {
-                        logger.Info($"Profile '{profile.Name}' applied successfully.");
+                        string message = $"Profile '{profile.Name}' applied successfully.";
+                        logger.Info(message);
+
+                        _notifyIcon.ShowBalloonTip(3000, "Display Profile Manager", message, ToolTipIcon.Info);
                     }
                     else
                     {

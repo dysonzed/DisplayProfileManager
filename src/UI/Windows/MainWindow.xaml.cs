@@ -416,6 +416,8 @@ namespace DisplayProfileManager.UI.Windows
                 if (applyResult.Success)
                 {
                     StatusTextBlock.Text = $"Profile '{profileName}' applied successfully!";
+                    MessageBox.Show($"Profile '{profileName}' has been applied successfully!", 
+                        "Profile Applied", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
                 {
